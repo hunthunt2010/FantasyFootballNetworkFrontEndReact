@@ -1,17 +1,41 @@
 import React, {Component} from 'react';
+import * as T from 'prop-types';
+import {sayHello} from '../actions';
 import {connect} from 'react-redux';
 
-export class Home extends Component {
+class Home extends Component {
 
   render() {
+    let {message} = this.props;
+    console.log(this.props);
+    let messageSpan = message ? <span>{message}</span> : null;
     return (
-      <span>
-        It worked
-      </span>
+      <div>
+        {messageSpan}
+        <button onClick={this.props.sayHello}>Say Hello</button>
+      </div>
     );
   }
 }
 
-Home.propTypes = {};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    sayHello: () => {
+      dispatch(sayHello());
+    }
+  };
+};
 
-export default connect(null, null)(Home);
+const mapStateToProps = state => {
+  const {example} = state;
+  return {
+    message: example.message
+  };
+};
+
+Home.propTypes = {
+  sayHello: T.func,
+  message: T.string
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
